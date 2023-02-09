@@ -40,12 +40,11 @@ entradaDados.question('valor: \n', function (numero1) {
                 //toUppercase - converte uma string em MAIÚSCULO
                 //toLowerCase - converte uma string em minúsculo
 
-                resultado = matematica.calculadora(valor1, valor2, operacao) != false;
-                if(resultado != false)
-                console.log(resultado)
-                else
+                resultado = matematica.calculadora(valor1, valor2, operacao);
+                if(resultado === false )
                 entradaDados.close();
-
+                else
+                console.log(resultado)
             }
 
         })
