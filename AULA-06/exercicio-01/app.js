@@ -15,8 +15,6 @@ entradaDados.question('Nome do(a) Aluno(a): ', function (aulista) {
 
     entradaDados.question('insira seu sexo (F ou M): ', function (sexoAulista) {
         let sexoAluno = sexoAulista;
-        let feminino;
-        let masculino;
 
         entradaDados.question('Nome do(a) Professor(a): ', function (docente) {
             let professor = docente;
@@ -47,7 +45,7 @@ entradaDados.question('Nome do(a) Aluno(a): ', function (aulista) {
                                         if (professor == ''
                                             || aluno == ''
                                             || sexoAluno == ''
-                                            || sexoDocente == ''
+                                            || sexoProfessor == ''
                                             || disciplina == ''
                                             || curso == ''
                                             || nota1 == ''
@@ -61,8 +59,8 @@ entradaDados.question('Nome do(a) Aluno(a): ', function (aulista) {
                                             || nota2 > 100
                                             || nota3 > 100
                                             || nota4 > 100
-                                            || nota1 < 0 
-                                            || nota2 < 0 
+                                            || nota1 < 0
+                                            || nota2 < 0
                                             || nota3 < 0
                                             || nota4 < 0) {
                                             console.log('ERRO: As notas são de 0 a 100. Preencha as lacunas de notas corretamente, por favor.')
@@ -72,32 +70,57 @@ entradaDados.question('Nome do(a) Aluno(a): ', function (aulista) {
                                             || isNaN(nota3)
                                             || isNaN(nota4)) {
                                             console.log('ERRO: Insira somente números na Lacuna de notas.')
-                                        } else if (!isNaN(aluno) 
-                                        || !isNaN(professor)
-                                        || !isNaN(sexoProfessor)
-                                        || !isNaN(sexoAluno)
-                                        || !isNaN(curso)
-                                        || !isNaN(disciplina)){
-                                        console.log('ERRO: Insira somente letras nas Lacunas acima das notas.')
-                                    } else {
-                                       media = mediaCalc.calcularMedia(valor01, valor02, valor03, valor04)
-                                       console.log(media)
+                                        } else if (!isNaN(aluno)
+                                            || !isNaN(professor)
+                                            || !isNaN(sexoProfessor)
+                                            || !isNaN(sexoAluno)
+                                            || !isNaN(curso)
+                                            || !isNaN(disciplina)) {
+                                            console.log('ERRO: Insira somente letras nas Lacunas acima das notas.')
+                                        } else {
+                                            media = mediaCalc.calcularMedia(valor01, valor02, valor03, valor04)
+                                            //    console.log(media)
+                                            if (media < 50) {
+                                                console.log(media)
+                                            } else if (media >= 70) {
+                                                console.log(media)
+                                            } else {
 
-                                       
-                                    }
+                                                entradaDados.question('Sua nota foi não satisfatória para \nser aprovado diretamente, por favor \ninsira a sua nota de exame para execução de uma segunda média: \n',
+                                                    function (notaExame) {
+                                                        let valorExame = notaExame;
+
+                                                        mediaExame = mediaCalc.calcularExame(notaExame, media);
+                                                        mediaFinalEx = mediaCalc.montarFormulario(aulista, docente, sexoAulista, sexoDocente, cursoAluno, disciplinaCurso, valor01, valor02, valor03, valor04, notaExame, media, mediaExame)
+                                                        if (valorExame == '') {
+                                                            console.log('ERRO: a lacuna não foi preenchida, tente novamente.')
+                                                        }//tratamento para o limite do número das notas  
+                                                        else if (valorExame > 100 || valorExame < 0) {
+                                                            console.log('ERRO: As notas são de 0 a 100. Preencha as lacunas de notas corretamente, por favor.')
+                                                        } else if (isNaN(valorExame)) {
+                                                            console.log('ERRO: Insira somente números na Lacuna, por favor.')
+                                                        } else {
+                                                            console.log(mediaFinalEx);
+                                                        }
+                                                    })
+                                            }
+
+
+
+                                        }
+
+                                    });
 
                                 });
-
                             });
                         });
                     });
                 });
+
             });
-
         });
-    });
 
-});
+    });
 
 
 
