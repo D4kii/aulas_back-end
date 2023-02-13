@@ -27,25 +27,93 @@ const calcularMedia = function (valor01,
 
 };
 
-const calcularExame = function (notaExame, media) {
+const calcularExame = function (notaExame,
+    media,
+    aluno,
+    professor,
+    sexoAluno,
+    sexoProfessor,
+    curso,
+    disciplina,
+    valor01,
+    valor02,
+    valor03,
+    valor04) {
+
+    let nomeAluno = aluno;
+    let nomeProf = professor;
+    let alunoSexo = sexoAluno;
+    let profSexo = sexoProfessor;
+    let nomeCurso = curso;
+    let nomeDisciplina = disciplina;
+    let nota1 = valor01;
+    let nota2 = valor02;
+    let nota3 = valor03;
+    let nota4 = valor04;
+    let resultado;
     let valorMedia = Number(media);
     let valorExame = Number(notaExame);
     let situacao = true;
-    let resultado;
+
 
     resultado = (Number(valorMedia) + Number(valorExame)) / 2;
 
-    //Validação para tratar quando a variável resultado não for processada por algum problema
-    if (resultado == undefined && resultado == false) {
-        return false;
-    }
-    else {
-        return resultado;
-    }
 
+    if (alunoSexo === 'f'
+        || alunoSexo === 'F'
+        && profSexo === 'f'
+        || alunoSexo === 'F') {
+
+        //Se a aluna foi reprovada de forma direta
+        if (resultado >= 60) {
+
+            return console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        } else {
+            return console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        }
+    } else if (alunoSexo == 'M'
+        || alunoSexo == 'm'
+        && profSexo == 'M'
+        || profSexo == 'm') {
+        //Se a aluna foi reprovada de forma direta
+
+        if (resultado >= 60) {
+            return console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        } else {
+            return console.log(`O aluno ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        }
+
+    } else if (alunoSexo == 'M'
+        || alunoSexo == 'm'
+        && profSexo == 'F'
+        || profSexo == 'f') {
+
+        if (resultado >= 60) {
+            return console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        } else {
+            return console.log(`O aluno ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        }
+
+    } else if (alunoSexo == 'F'
+        || alunoSexo == 'f'
+        && profSexo == 'M'
+        || profSexo == 'm') {
+
+        if (resultado >= 60) {
+            return console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        } else {
+            return console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${valorExame}\nMédia Final: ${valorMedia}\nMédia final do Exame: ${resultado}`)
+        }
+
+    } else {
+        //Validação para tratar quando a variável resultado não for processada por algum problema
+        console.log('alooou')
+
+        return false;
+
+    }
 
 }
-
 const montarFormulario = function (aluno,
     professor,
     sexoAluno,
@@ -56,119 +124,91 @@ const montarFormulario = function (aluno,
     valor02,
     valor03,
     valor04,
-    valorExame,
-    media,
-    exameMedia) {
+    media) {
 
     let nomeAluno = aluno;
     let nomeProf = professor;
-    let alunoSexo = sexoAluno.toUpperCase();
-    let profSexo = sexoProfessor.toUpperCase();
+    let alunoSexo = sexoAluno;
+    let profSexo = sexoProfessor;
     let nomeCurso = curso;
     let nomeDisciplina = disciplina;
     let nota1 = valor01;
     let nota2 = valor02;
     let nota3 = valor03;
     let nota4 = valor04;
-    let notaExame = valorExame;
     let notaFinal = media;
-    let mediaExame = exameMedia;
 
-    if (alunoSexo == 'FEMININO'
-        || alunoSexo == 'F'
-        || alunoSexo == 'MULHER'
-        || profSexo == 'F'
-        || profSexo == 'FEMININO'
-        || profSexo == 'MULHER') {
+    if (notaFinal <= 50) {
         //Se a aluna foi reprovada de forma direta
-        if (notaFinal < 50) {
-            console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
-        } else if (notaFinal >= 70) {
-            console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
+        if (alunoSexo == 'F'
+            || alunoSexo == 'f'
+            && profSexo == 'M'
+            || profSexo == 'm') {
+            return console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
+        } else if (alunoSexo == 'MASCULINO'
+            || alunoSexo == 'M'
+            || alunoSexo == 'HOMEM'
+            && profSexo == 'MASCULINO'
+            || profSexo == 'M'
+            || profSexor == 'HOMEM') {
+            return console.log(`O aluno ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
 
-        } else {
-            if (mediaExame >= 60) {
-                console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            } else {
-                console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            }
+        } else if (alunoSexo == 'F'
+            || alunoSexo == 'f'
+            && profSexo == 'M'
+            || profSexo == 'm') {
+            return console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
+        } else if (alunoSexo == 'F'
+            || alunoSexo == 'f'
+            && profSexo == 'M'
+            || profSexo == 'm') {
+            return console.log(`o aluno ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
         }
-    } else if (alunoSexo == 'MASCULINO'
-        || alunoSexo == 'M'
-        || alunoSexo == 'HOMEM'
-        || profSexo == 'MASCULINO'
-        || profSexo == 'M'
-        || profSexor == 'HOMEM') {
+    } else if (notaFinal >= 70) {
         //Se a aluna foi reprovada de forma direta
-        if (notaFinal < 50) {
-            console.log(`O aluno ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
-        } else if (notaFinal >= 70) {
-            console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
-
-        } else {
-            if (mediaExame >= 60) {
-                console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            } else {
-                console.log(`O aluno ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            }
+        if (alunoSexo == 'F'
+            || alunoSexo == 'f'
+            && profSexo == 'M'
+            || profSexo == 'm') {
+            return console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
+        } else if (alunoSexo == 'F'
+            || alunoSexo == 'f'
+            && profSexo == 'M'
+            || profSexo == 'm') {
+            return console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
+        } else if (alunoSexo == 'F'
+            || alunoSexo == 'f'
+            && profSexo == 'M'
+            || profSexo == 'm') {
+            return console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas do aluno: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
+        } else if (alunoSexo == 'F'
+            || alunoSexo == 'f'
+            && profSexo == 'M'
+            || profSexo == 'm') {
+            return console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessor: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
         }
-    } else if (alunoSexo == 'MASCULINO'
-        || alunoSexo == 'M'
-        || alunoSexo == 'HOMEM'
-        || profSexo == 'F'
-        || profSexo == 'FEMININO'
-        || profSexo == 'MULHER') {
         //Se a aluna foi reprovada de forma direta
-        if (notaFinal < 50) {
-            console.log(`O alunO ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
-        } else if (notaFinal >= 70) {
-            console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
 
-        } else {
-            if (mediaExame >= 60) {
-                console.log(`O aluno ${nomeAluno} foi aprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            } else {
-                console.log(`O aluno ${nomeAluno} foi reprovado na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            }
-        }
-    } else if (alunoSexo == 'FEMININO'
-        || alunoSexo == 'F'
-        || alunoSexo == 'MULHER'
-        || profSexo == 'MASCULINO'
-        || profSexo == 'M'
-        || profSexo == 'HOMEM') {
-        //Se a aluna foi reprovada de forma direta
-        if (notaFinal < 50) {
-            console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
-        } else if (notaFinal >= 70) {
-            console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nMédia Final: ${notaFinal}`)
-
-        } else {
-            if (mediaExame >= 60) {
-                console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            } else {
-                console.log(`A aluna ${nomeAluno} foi reprovada na disciplina ${nomeDisciplina}\nCurso: ${nomeCurso}\nProfessora: ${nomeProf}\nNotas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\nNota do exame: ${notaExame}\nMédia Final: ${notaFinal}\nMédia final do Exame: ${mediaExame}`)
-            }
-        }
     } else {
-        //Validação para tratar quando a variável resultado não for processada por algum problema
-        
-            return false;
-        
+        return false;
     }
 
-
-    // console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\n
-    // Curso: ${nomeCurso}\n
-    // Professora: ${nomeProf}\n
-    // Notas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\n
-    // Nota do exame: ${notaExame}\n
-    // Média Final: ${notaFinal}\n
-    // Média final do Exame: ${mediaExame}`)
-
 }
+
+
+// console.log(`A aluna ${nomeAluno} foi aprovada na disciplina ${nomeDisciplina}\n
+// Curso: ${nomeCurso}\n
+// Professora: ${nomeProf}\n
+// Notas da aluna: ${nota1}, ${nota2}, ${nota3}, ${nota4}\n
+// Nota do exame: ${notaExame}\n
+// Média Final: ${notaFinal}\n
+// Média final do Exame: ${mediaExame}`)
+
+
+
 module.exports = {
+    montarFormulario,
     calcularMedia,
-    calcularExame,
-    montarFormulario
+    calcularExame
+
 }
