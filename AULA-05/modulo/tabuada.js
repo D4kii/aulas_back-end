@@ -1,6 +1,6 @@
 /****************************************************************************************
  * Objetico: Arquivo destinado ao processamento do calculo de uma tabuada
- * Data: 09/02/2023
+ * Data: 16/02/2023
  * Autor: Daniela Lino
  * Versão: 1.0
 *****************************************************************************************/
@@ -22,18 +22,6 @@ const calcularTabuada = function (multiplicando, maxMultiplicador) {
             resultado = tabuada * cont;
             console.log(`${tabuada} x ${cont} = ${resultado}`);
         }
-
-        //2x0=0
-        // while (cont <= maxContador) {
-        //     resultado = tabuada * cont;
-        //     console.log(`${tabuada} x ${cont} = ${resultado}`);
-        //     //cont = cont + 1;
-        //     //cont++
-        //     cont += 1;
-        // }
-
-
-
     }
 };
 

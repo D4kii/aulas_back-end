@@ -14,7 +14,6 @@ const calcularTabuada = function (primeiroMultiplicando, segundoMultiplicando, m
     let status = true; //start
     let resultado;
 
-
     if (minContador == 0 || segundoNumero == 0)
         status === false;
     else if (isNaN(minContador) || isNaN(maxContador))
@@ -30,17 +29,9 @@ const calcularTabuada = function (primeiroMultiplicando, segundoMultiplicando, m
             resultado = segundoNumero * cont;
             console.log(`${segundoNumero} x ${cont} = ${resultado}`);
         }
-
-
-
-
-
-
-
     }
 };
 
-calcularTabuada(0, 10);
 
 module.exports = {
     calcularTabuada
