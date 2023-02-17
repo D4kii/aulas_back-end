@@ -53,6 +53,7 @@ entradaDados.question('Nome do(a) Aluno(a): ', function (aulista) {
                                             || nota3 == ''
                                             || nota4 == '') {
                                             console.log('ERRO: alguma lacuna não está preechida, tente novamente.')
+                                            entradaDados.close();
                                         }//tratamento para o limite do número das notas  
                                         else if (
                                             nota1 > 100
@@ -64,12 +65,14 @@ entradaDados.question('Nome do(a) Aluno(a): ', function (aulista) {
                                             || nota3 < 0
                                             || nota4 < 0) {
                                             console.log('ERRO: As notas são de 0 a 100. Preencha as lacunas de notas corretamente, por favor.')
+                                            entradaDados.close();
                                         } else if (
                                             isNaN(nota1)
                                             || isNaN(nota2)
                                             || isNaN(nota3)
                                             || isNaN(nota4)) {
                                             console.log('ERRO: Insira somente números na Lacuna de notas.')
+                                            entradaDados.close();
                                         } else if (!isNaN(aluno)
                                             || !isNaN(professor)
                                             || !isNaN(sexoProfessor)
@@ -77,34 +80,51 @@ entradaDados.question('Nome do(a) Aluno(a): ', function (aulista) {
                                             || !isNaN(curso)
                                             || !isNaN(disciplina)) {
                                             console.log('ERRO: Insira somente letras nas Lacunas acima das notas.')
+                                            entradaDados.close();
                                         } else {
-                                            media = mediaCalc.calcularMedia(valor01, valor02, valor03, valor04)
-                                            mediaFormulario = mediaCalc.montarFormulario(aulista, docente, sexoAulista, sexoDocente, cursoAluno, disciplinaCurso, valor01, valor02, valor03, valor04, media)
-                                            //    console.log(media)
-                                            if (media < 50) {
-                                                console.log(mediaFormulario)
-                                            } else if (media >= 70) {
-                                                console.log(mediaFormulario)
+                                            media = mediaCalc.calcularMedia(nota1, nota2, nota3, nota4)
+                                            if (media < 50 || media >= 70) {
+
+                                                mediaFormulario = mediaCalc.montarFormulario(aluno,
+                                                    professor,
+                                                    sexoAluno,
+                                                    sexoProfessor,
+                                                    curso,
+                                                    disciplina,
+                                                    nota1, nota2, nota3, nota4, media)
+                                                //    console.log(media)
+
+
+                                                entradaDados.close();
                                             } else {
 
                                                 entradaDados.question('Sua nota foi não satisfatória para \nser aprovado diretamente, por favor \ninsira a sua nota de exame para execução de uma segunda média: \n',
                                                     function (notaExame) {
                                                         let valorExame = notaExame;
-                                                        mediaExame = mediaCalc.calcularExame(valorExame, media, aulista, docente, sexoAulista, sexoDocente, cursoAluno, disciplinaCurso, valor01, valor02, valor03, valor04);
-                                                        
-                                                        
-                                                        if (notaExame == '') {
+                                                        if (valorExame == '') {
                                                             console.log('ERRO: a lacuna não foi preenchida, tente novamente.')
                                                         }//tratamento para o limite do número das notas  
-                                                        else if (notaExame > 100 || valorExame < 0) {
+                                                        else if (valorExame > 100 || valorExame < 0) {
                                                             console.log('ERRO: As notas são de 0 a 100. Preencha as lacunas de notas corretamente, por favor.')
-                                                        } else if (isNaN(notaExame)) {
+                                                        } else if (isNaN(valorExame)) {
                                                             console.log('ERRO: Insira somente números na Lacuna, por favor.')
-                                                        } else if (mediaExame == false) {
-                                                            console.log('ERRO: Algo deu errado, por favor tente novamente')
                                                         } else {
-                                                            console.log(mediaExame);
-                                                            entradaDados.close();
+
+                                                            mediaExame = mediaCalc.calcularExame(valorExame,
+                                                                media,
+                                                                aluno,
+                                                                professor,
+                                                                sexoAluno,
+                                                                sexoProfessor,
+                                                                curso,
+                                                                disciplina,
+                                                                nota1, nota2, nota3, nota4);
+                                                            if (mediaExame == false) {
+                                                                console.log('ERRO: Algo deu errado, por favor tente novamente')
+                                                                entradaDados.close();
+                                                            } else {
+                                                                entradaDados.close();
+                                                            }
                                                         }
                                                     })
                                             }
