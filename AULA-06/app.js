@@ -248,21 +248,40 @@ const listagemProdutos = function () {
 
     const produtos = listProdutosJSON.produtos.length;
     const tamanhoCores = listProdutosJSON.produtos
-    
 
-    for (let cont = 0; cont < produtos; cont++) {
-        console.log('**************************************************\n')
-        console.log('Nome: ' + listProdutosJSON.produtos[cont].nome);
-        console.log('Marca: ' + listProdutosJSON.produtos[cont].marca);
-        console.log('Valor: ' + listProdutosJSON.produtos[cont].valor);
-        
-        for (let contCores = 0 ; contCores <= cont; contCores++) {
-            
-            console.log('Cor: ' + listProdutosJSON.produtos[cont].cores[contCores]);
-            
+
+    //Percorre o Array de produtos
+    listProdutosJSON.produtos.forEach(function (itemProduto) {
+        console.log('\nNome: ' + itemProduto.nome);
+        console.log('Marca: ' + itemProduto.marca);
+
+        if (itemProduto.cores != undefined) {
+            //Percorre o Array de cores que está dentro do Array de produtos(item)
+            itemProduto.cores.forEach(function (itemCor) {
+                console.log('***Cor: ' + itemCor)
+            })
         }
-       
-    }
+        if (itemProduto.modelos != undefined) {
+            //Percorre o Array de modelos que está dentro do Array de produtos
+            itemProduto.modelos.forEach(function (itemModelo) {
+                console.log('Modelo: ' + itemModelo)
+            })
+
+        }
+    })
+    // for (let cont = 0; cont < produtos; cont++) {
+    //     console.log('**************************************************\n')
+    //     console.log('Nome: ' + listProdutosJSON.produtos[cont].nome);
+    //     console.log('Marca: ' + listProdutosJSON.produtos[cont].marca);
+    //     console.log('Valor: ' + listProdutosJSON.produtos[cont].valor);
+
+    //     // for (let contCores = 0 ; contCores <= cont; contCores++) {
+
+    //     //     console.log('Cor: ' + listProdutosJSON.produtos[cont].cores[contCores]);
+
+    //     // }
+
+    // }
 
 }
 listagemProdutos()
