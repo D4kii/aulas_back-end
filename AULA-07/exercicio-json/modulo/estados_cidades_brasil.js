@@ -131,12 +131,73 @@ const getEstadosRegiao = function (json, filtro) {
 
 }
 const getCapitalPais = function (json) {
-    
+    const estadosJson = json.slice();
+    const capitaisJson = {};
+    const capitaisList = [];
+    let status;
+
+    estadosJson.forEach(estados => {
+        if (estados.capital_pais !== undefined) {
+            capitaisJson.capitais = capitaisList;
+
+            console.log(estados.capital_pais);
+
+
+            estados.capital_pais.forEach(capital => {
+                const todasAsCapitais = {}
+                todasAsCapitais.capital_atual = capital.capital;
+
+            });
+
+
+
+            todasAsCapitais.uf = estados.sigla;
+            todasAsCapitais.capital_atual = estados.capital_pais;
+
+
+            capitaisList.push(todasAsCapitais);
+
+
+
+
+        }
+        status = true;
+    });
+    console.log(capitaisJson)
+
 }
 const getCidades = function (json, filtro) {
-    
+    const estadosJson = json.slice();
+    const cidadeDadosJson = {};
+    const cidadesList = [];
+    let status;
+
+    if (estadosJson !== undefined) {
+        estadosJson.forEach(estados => {
+
+            estados.cidade.forEach( function(cidades) {
+                cidadesList.push(cidades.nome)
+
+                cidadeDadosJson.quantidade_cidades = cidadesList.length
+                cidadeDadosJson.cidades = cidadesList
+
+            });
+            cidadeDadosJson.uf = estados.sigla;
+            cidadeDadosJson.descricao = 
+            cidadeDadosJson.quantidade = cidadesList.length;
+        });
+        status = true;
+    } else {
+        status = false;
+    }
+
+    if (status) {
+        return cidadeDadosJson;
+    }
 }
 
+console.log(getCidades(estadosJson))
+// getCapitalPais(estadosJson);
 // getEstadosRegiao(estadosJson, 'Sudeste')
 // getCapitalEstado(estadosJson, 'AL')
 // getDadosEstado(estadosJson, 'SP')
