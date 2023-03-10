@@ -5,13 +5,13 @@
  * Data: 03/03/2023
  * Versão: 1.0
  **********************************************************************************************/
-var estadosBrasil = require('../estados_cidades.js')
-const { estadosCidades } = require('../estados_cidades.js')
+var estadosBrasil = require('./estados_cidades.js')
+const { estadosCidades } = require('./estados_cidades.js')
 
-const estadosJson = estadosBrasil.estadosCidades.estados
+const estadoJson = estadosBrasil.estadosCidades.estados
 
-const getListaDeEstados = function (json) {
-    const estadosJson = json.slice();
+const getListaDeEstados = function () {
+    const estadosJson = estadoJson.slice();
     const siglasJson = {};
     const ufList = [];
     let status;
@@ -31,15 +31,15 @@ const getListaDeEstados = function (json) {
         return siglasJson;
     }
 }
-const getDadosEstado = function (json, filtro) {
+const getDadosEstado = function (filtro) {
     const uf = filtro;
-    const estadoJson = json.slice()
+    const estadosJson = estadoJson.slice()
     const dadosEstadoJson = {};
     let status;
 
     if (uf !== undefined) {
 
-        estadoJson.forEach(dados => {
+        estadosJson.forEach(dados => {
 
             if (dados.sigla === uf) {
                 dadosEstadoJson.uf = dados.sigla;
@@ -62,14 +62,14 @@ const getDadosEstado = function (json, filtro) {
         return false;
     }
 }
-const getCapitalEstado = function (json, filtro) {
+const getCapitalEstado = function (filtro) {
     const uf = filtro;
-    const estadoJson = json.slice();
+    const estadosJson = estadoJson.slice();
     const capitalJson = {};
     let status;
 
     if (uf !== undefined) {
-        estadoJson.forEach(estado => {
+        estadosJson.forEach(estado => {
 
             if (estado.sigla === uf) {
 
@@ -93,9 +93,9 @@ const getCapitalEstado = function (json, filtro) {
     }
 
 }
-const getEstadosRegiao = function (json, filtro) {
+const getEstadosRegiao = function (filtro) {
     const regiaoFiltro = filtro;
-    const estadosJson = json.slice();
+    const estadosJson = estadoJson.slice();
     const regiaoJson = {};
     const estadosList = [];
     let status;
@@ -130,61 +130,64 @@ const getEstadosRegiao = function (json, filtro) {
     }
 
 }
-const getCapitalPais = function (json) {
-    const estadosJson = json.slice();
+const getCapitalPais = function () {
+    const estadosJson = estadoJson.slice();
     const capitaisJson = {};
     const capitaisList = [];
     let status;
+    if (estadosJson.capital_pais !== undefined) {
+        estadosJson.forEach(estados => {
 
-    estadosJson.forEach(estados => {
-        if (estados.capital_pais !== undefined) {
             capitaisJson.capitais = capitaisList;
 
-            console.log(estados.capital_pais);
+            const todasAsCapitais = {}
 
-
-            estados.capital_pais.forEach(capital => {
-                const todasAsCapitais = {}
-                todasAsCapitais.capital_atual = capital.capital;
-
-            });
-
-
+            todasAsCapitais.capital_atual = estados.capital_pais.capital;
 
             todasAsCapitais.uf = estados.sigla;
-            todasAsCapitais.capital_atual = estados.capital_pais;
-
+            todasAsCapitais.descricao = estados.nome;
+            todasAsCapitais.capital = estados.capital;
+            todasAsCapitais.regiao = estados.regiao;
+            todasAsCapitais.capital_pais_ano_inicio = estados.capital_pais.ano_inicio;
+            todasAsCapitais.capital_pais_ano_termino = estados.capital_pais.ano_fim;
 
             capitaisList.push(todasAsCapitais);
 
-
-
-
-        }
+        });
         status = true;
-    });
-    console.log(capitaisJson)
+    }else {
+        status = false;
+    }
 
+    if (status) {
+        return capitaisJson;
+    } else {
+        return false;
+    }
+    
 }
-const getCidades = function (json, filtro) {
-    const estadosJson = json.slice();
+const getCidades = function (filtro) {
+    const uf = filtro
+    const estadosJson = estadoJson.slice();
     const cidadeDadosJson = {};
     const cidadesList = [];
     let status;
 
     if (estadosJson !== undefined) {
         estadosJson.forEach(estados => {
+            if (uf == estados.sigla) {
 
-            estados.cidade.forEach( function(cidades) {
-                cidadesList.push(cidades.nome)
+                estados.cidades.forEach(cidade => {
+                    cidadesList.push(cidade.nome)
 
-                cidadeDadosJson.quantidade_cidades = cidadesList.length
-                cidadeDadosJson.cidades = cidadesList
+                    cidadeDadosJson.uf = estados.sigla;
+                    cidadeDadosJson.descricao = estados.nome
+                    cidadeDadosJson.quantidade_cidades = cidadesList.length
+                    cidadeDadosJson.cidades = cidadesList
 
-            });
-            cidadeDadosJson.uf = estados.sigla;
-            cidadeDadosJson.descricao = 
-            cidadeDadosJson.quantidade = cidadesList.length;
+                });
+
+            }
         });
         status = true;
     } else {
@@ -196,9 +199,19 @@ const getCidades = function (json, filtro) {
     }
 }
 
-console.log(getCidades(estadosJson))
+//getCapitalPais(estadosJson)
+// console.log(getCidades(estadosJson, 'AC'))
 // getCapitalPais(estadosJson);
 // getEstadosRegiao(estadosJson, 'Sudeste')
 // getCapitalEstado(estadosJson, 'AL')
 // getDadosEstado(estadosJson, 'SP')
 // getListaDeEstados(estadosJson)
+
+module.exports = {
+    getListaDeEstados,
+    getDadosEstado,
+    getCapitalEstado,
+    getEstadosRegiao,
+    getCapitalPais,
+    getCidades
+}
