@@ -32,12 +32,12 @@ const getListaDeEstados = function () {
     }
 }
 const getDadosEstado = function (filtro) {
-    const uf = filtro;
+    const uf = filtro.toUpperCase();
     const estadosJson = estadoJson.slice()
     const dadosEstadoJson = {};
     let status;
 
-    if (uf !== undefined) {
+    if (uf != undefined) {
 
         estadosJson.forEach(dados => {
 
@@ -46,19 +46,20 @@ const getDadosEstado = function (filtro) {
                 dadosEstadoJson.descricao = dados.nome;
                 dadosEstadoJson.capital = dados.capital;
                 dadosEstadoJson.regiao = dados.regiao;
+                status = true
+            } else {
+                status = false;
             }
         });
-
-        status = true
     } else {
         status = false
     }
 
     if (status) {
+        console.log(dadosEstadoJson);
         return dadosEstadoJson;
 
     } else {
-        console.log('ERRO');
         return false;
     }
 }
@@ -76,17 +77,18 @@ const getCapitalEstado = function (filtro) {
                 capitalJson.uf = estado.sigla;
                 capitalJson.descricao = estado.nome;
                 capitalJson.capital = estado.capital;
+                status = true;
+            } else {
+                return false;
             }
-
         });
-
-        status = true;
 
     } else {
         status = false;
     }
 
     if (status) {
+        console.log(capitalJson)
         return capitalJson;
     } else {
         return false;
@@ -94,7 +96,7 @@ const getCapitalEstado = function (filtro) {
 
 }
 const getEstadosRegiao = function (filtro) {
-    const regiaoFiltro = filtro;
+    const regiaoFiltro = filtro.toUpperCase();
     const estadosJson = estadoJson.slice();
     const regiaoJson = {};
     const estadosList = [];
@@ -116,17 +118,24 @@ const getEstadosRegiao = function (filtro) {
 
                 estadosList.push(estadosPorRegiao);
 
+                status = true;
+            } else {
+                status = false;
             }
         });
-        status = true;
+
     } else {
         status = false;
     }
 
     if (status) {
+
         return regiaoJson;
+
     } else {
+
         return false;
+
     }
 
 }
@@ -153,9 +162,10 @@ const getCapitalPais = function () {
 
             capitaisList.push(todasAsCapitais);
 
+            status = true;
         });
-        status = true;
-    }else {
+
+    } else {
         status = false;
     }
 
@@ -164,7 +174,7 @@ const getCapitalPais = function () {
     } else {
         return false;
     }
-    
+
 }
 const getCidades = function (filtro) {
     const uf = filtro
@@ -184,18 +194,22 @@ const getCidades = function (filtro) {
                     cidadeDadosJson.descricao = estados.nome
                     cidadeDadosJson.quantidade_cidades = cidadesList.length
                     cidadeDadosJson.cidades = cidadesList
-
+                    status = true;
                 });
 
+            }else{
+                status = false;
             }
         });
-        status = true;
+        
     } else {
         status = false;
     }
 
     if (status) {
         return cidadeDadosJson;
+    } else{
+        return false;
     }
 }
 
