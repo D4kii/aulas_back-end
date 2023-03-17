@@ -48,7 +48,7 @@ const getDadosEstado = function (filtro) {
                 dadosEstadoJson.regiao = dados.regiao;
                 status = true
             } else {
-                status = false;
+                return false;
             }
         });
     } else {
@@ -64,15 +64,15 @@ const getDadosEstado = function (filtro) {
     }
 }
 const getCapitalEstado = function (filtro) {
-    const uf = filtro;
+    const uf = filtro.toUpperCase();
     const estadosJson = estadoJson.slice();
     const capitalJson = {};
     let status;
 
-    if (uf !== undefined) {
+    if (uf != undefined) {
         estadosJson.forEach(estado => {
 
-            if (estado.sigla === uf) {
+            if (estado.sigla == uf) {
 
                 capitalJson.uf = estado.sigla;
                 capitalJson.descricao = estado.nome;
@@ -96,7 +96,7 @@ const getCapitalEstado = function (filtro) {
 
 }
 const getEstadosRegiao = function (filtro) {
-    const regiaoFiltro = filtro.toUpperCase();
+    const regiaoFiltro = filtro;
     const estadosJson = estadoJson.slice();
     const regiaoJson = {};
     const estadosList = [];
@@ -120,7 +120,7 @@ const getEstadosRegiao = function (filtro) {
 
                 status = true;
             } else {
-                status = false;
+               return false;
             }
         });
 
@@ -198,7 +198,7 @@ const getCidades = function (filtro) {
                 });
 
             }else{
-                status = false;
+                return false;
             }
         });
         
