@@ -144,8 +144,10 @@ const getCapitalPais = function () {
     const capitaisJson = {};
     const capitaisList = [];
     let status;
-    if (estadosJson.capital_pais !== undefined) {
+    
         estadosJson.forEach(estados => {
+            if (estados.capital_pais !== undefined) {
+            console.log(2)
 
             capitaisJson.capitais = capitaisList;
 
@@ -163,13 +165,16 @@ const getCapitalPais = function () {
             capitaisList.push(todasAsCapitais);
 
             status = true;
+        } else {
+            console.log(estados.capital_pais)
+            return false;
+        }
         });
 
-    } else {
-        status = false;
-    }
+   
 
     if (status) {
+        console.log(capitaisJson)
         return capitaisJson;
     } else {
         return false;
@@ -177,7 +182,7 @@ const getCapitalPais = function () {
 
 }
 const getCidades = function (filtro) {
-    const uf = filtro
+    const uf = filtro.toUpperCase();
     const estadosJson = estadoJson.slice();
     const cidadeDadosJson = {};
     const cidadesList = [];

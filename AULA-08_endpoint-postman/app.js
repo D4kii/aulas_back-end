@@ -109,7 +109,7 @@ app.get('/estado/sigla/:uf', cors(), async function (request, response, next) {
 });
 
 //EndPoint: lista as informações referente a capital de um estado do Brasil, onde a sigla do estado será o critério de filtro.
-app.get('/senai/cidades/estado/sigla/:uf', cors(), async function (request, response, next) {
+app.get('/senai/capital/estado/sigla/:uf', cors(), async function (request, response, next) {
 
     let statusCode;
     let dadosCapital = {};
@@ -169,37 +169,58 @@ app.get('/senai/estado/regiao/:regiao', cors(), async function (request, respons
     response.json(dadosRegiao);
 });
 
-//EndPoint: lista as as as informações referente aos estados que formam a capital do Brasil. 
-app.get('/senai/estado/capital', cors(), async function (request, response, next) {
+//EndPoint: lista as informações referente aos estados que formam a capital do Brasil. 
+app.get('/senai/estados/pais/capital', cors(), async function (request, response, next) {
 
     let statusCode;
     let dadosCapitalPais = {};
 
-    //Recebe a sigla do estado que será enviada pela URL da requisição
-    let estadosCapitalPais = request.params.regiao
-    console.log(estadosCapitalPais)
+    let capitalPais = estadosCidades.getCapitalPais();
 
-    //Tratamento para validação de entrada de dados incorreta
-    if (estadosCapitalPais == '' || estadosCapitalPais == undefined || !isNaN(estadosCapitalPais)) {
-        response.status(400);
-        dadosCapitalPais.message = 'Não foi possível processar pois os dados de entrada que foi enviado não corresponde ao exigido'
+    console.log(capitalPais)
+    if (capitalPais) {
+        statusCode = 200;
+        dadosCapitalPais = capitalPais;
     } else {
+        statusCode = 500;
 
-        let capitalPais = estadosCidades.getCapitalPais(estadosCapitalPais);
-        console.log(capitalPais)
-        if (capitalPais) {
-            statusCode = 200;
-            dadosCapitalPais = capitalPais;
-        } else {
-            statusCode = 404;
-        }
     }
     //Retorna o código e o JSON
     response.status(statusCode);
     response.json(dadosCapitalPais);
 });
 
-app.get('/senai/cidades', cors(), async function (request, response, next) {
+//EndPoint: lista as informações referente a cidades, filtrado pela sigla do estado.
+app.get('/v1/senai/estado/cidades/sigla/:uf', cors(), async function (request, response, next) {
+
+    let siglaEstado = request.params.uf
+    
+    let statusCode;
+    let dadosCidades = {};
+
+
+    //Tratamento para validação de entrada de dados incorreta
+    if (siglaEstado == '' || siglaEstado == undefined || siglaEstado.length != 2 || !isNaN(siglaEstado)) {
+        response.status(400);
+        dadoCidades.message = 'Não foi possível processar pois os dados de entrada (uf) que foi enviado não corresponde ao exigido, confira o valor, precisa ser caracteres e ter 2 digitos'
+    } else {
+
+        let cidades = estadosCidades.getCidades(siglaEstado);
+        if (cidades) {
+            statusCode = 200;
+            dadosCidades = cidades;
+        } else {
+            statusCode = 404;
+        }
+    }
+    //Retorna o código e o JSON
+    response.status(statusCode);
+    response.json(dadosCidades);
+
+});
+
+
+app.get('/v2/senai/cidades', cors(), async function (request, response, next) {
 
 
     /**
