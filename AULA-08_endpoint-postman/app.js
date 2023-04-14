@@ -79,7 +79,7 @@ app.get('/estados', cors(), async function (request, response, next) {
 });
 
 //EndPoint: lista os dados do estado filtrando pela sigla do estado
-app.get('/estado/sigla/:uf', cors(), async function (request, response, next) {
+app.get('/senai/estado/sigla/:uf', cors(), async function (request, response, next) {
 
     let statusCode;
     let dadosEstado = {};
