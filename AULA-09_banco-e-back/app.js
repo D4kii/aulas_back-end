@@ -10,6 +10,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { request, response } = require('express');
 
+//Import do arquivo da controller que irá solicitar a model os dados da BD
+const controllerAluno = require('./controller/controller_aluno.js');
+
+
 //Cria o objeto app conforme a classe do express
 const app = express();
 
@@ -35,27 +39,67 @@ app.use((request, response, next) => {
  * Versão: 1.0
  *****************************************************************************/
 
+/**
+ * 
+ *     npm install prisma --save
+ *     npx prisma
+ *     npx prisma init
+ *     npm install @prisma/client --save
+ *     
+ *     npx prisma migrate dev -- serve para realizar o sincronismo entre o prisma e o BD
+ * 
+ */
+
 
 //EndPoint: Retorna todos os dados de alunos
-app.get('/v1/lion-school/aluno', cors(), async, function (request, response) {
+app.get('/v1/lion-school/aluno', cors(), async function (request, response) {
+
+    let dadosAluno = await controllerAluno.getAlunos();
+
+    if (dadosAluno) {
+        response.json(dadosAluno);
+        response.status(200);
+    } else {
+        response.json();
+        response.status(404);
+    }
 
 });
 
 //EndPoint: Retorna os aluno filtrando pelo ID
-app.get('/v1/lion-school/aluno/:id', cors(), async, function (request, response) {
+app.get('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
+
+});
+
+//EndPoint: Retorna os aluno filtrando pelo nome
+app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function (request, response) {
+    //Recebe o nome do aluno que será enviada pela URL da requisição
+    let nomeAluno = request.params.nome
+    console.log(nomeAluno);
+    
+
+    let dadosAlunosByName = await controllerAluno.getBuscarAlunoNome(nomeAluno)
+
+    if (dadosAlunosByName) {
+        response.json(dadosAlunosByName);
+        response.status(200);
+    } else {
+        response.json();
+        response.status(400);
+    }
 
 });
 
 //EndPoint: Atualiza um aluno existente, filtrando pelo id
-app.post('/v1/lion-school/aluno/:id', cors(), async, function (request, response) {
+app.post('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
 
 });
 
 //EndPoint: Exclui um aluno existente, filtrando pelo id
-app.delete('/v1/lion-school/aluno/:id', cors(), async, function (request, response) {
+app.delete('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
 
 });
 
-app.listen(8080, function(){
+app.listen(8080, function () {
     console.log('Servidor aguardando requisições na porta 8080')
 })
