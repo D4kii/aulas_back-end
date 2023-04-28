@@ -10,9 +10,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { request, response } = require('express');
 
-//Import do arquivo da controller que irá solicitar a model os dados da BD
-const controllerAluno = require('./controller/controller_aluno.js');
-
 
 //Cria o objeto app conforme a classe do express
 const app = express();
@@ -51,8 +48,16 @@ app.use((request, response, next) => {
  */
 
 
+//Define que os dados que iram chegar no body da requisição será no padrão JSON
+const bodyParserJSON = bodyParser.json();
+
+//Import do arquivo da controller que irá solicitar a model os dados da BD
+var controllerAluno = require('./controller/controller_aluno.js');
+
+
+
 //EndPoint: Retorna todos os dados de alunos
-app.get('/v1/lion-school/aluno', cors(), async function (request, response) {
+app.get('/v1/lion-school/aluno', cors(), async function(request, response) {
 
     let dadosAluno = await controllerAluno.getAlunos();
 
@@ -67,16 +72,31 @@ app.get('/v1/lion-school/aluno', cors(), async function (request, response) {
 });
 
 //EndPoint: Retorna os aluno filtrando pelo ID
-app.get('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
+app.get('/v1/lion-school/aluno/:id', cors(), async function(request, response) {
+
+    //Recebe o nome do aluno que será enviada pela URL da requisição
+    let idAluno = request.params.id
+    console.log(idAluno);
+
+
+    let dadosAlunosById = await controllerAluno.getBuscarAlunoID(idAluno)
+
+    if (dadosAlunosById) {
+        response.json(dadosAlunosById);
+        response.status(200);
+    } else {
+        response.json();
+        response.status(400);
+    }
 
 });
 
 //EndPoint: Retorna os aluno filtrando pelo nome
-app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function (request, response) {
+app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function(request, response) {
     //Recebe o nome do aluno que será enviada pela URL da requisição
     let nomeAluno = request.params.nome
     console.log(nomeAluno);
-    
+
 
     let dadosAlunosByName = await controllerAluno.getBuscarAlunoNome(nomeAluno)
 
@@ -91,15 +111,23 @@ app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function (request, res
 });
 
 //EndPoint: Atualiza um aluno existente, filtrando pelo id
-app.post('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
+app.post('/v1/lion-school/aluno', cors(), bodyParserJSON, async function(request, response) {
+
+    //Recebe os dados encaminhados na requisição 
+    let dadosBody = request.body;
+
+    let resultDadosAluno = await controllerAluno.inserirAluno(dadosBody);
+
+    response.status(resultDadosAluno.status);
+    response.json(resultDadosAluno)
 
 });
 
 //EndPoint: Exclui um aluno existente, filtrando pelo id
-app.delete('/v1/lion-school/aluno/:id', cors(), async function (request, response) {
+app.delete('/v1/lion-school/aluno/:id', cors(), async function(request, response) {
 
 });
 
-app.listen(8080, function () {
+app.listen(8080, function() {
     console.log('Servidor aguardando requisições na porta 8080')
 })
