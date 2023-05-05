@@ -10,9 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//Sempre que for sincronizar o prisma com o db, temos que criar pelo menos uma tabela
-// via ORM, para acontecer o processo de sincronizar
-//model tbl_test{
-//  id Int @id @default(autoincrement())
-//  nome String 
+//model teste {
+ // id Int @id @default(autoincrement())
+ // nome String
 //}

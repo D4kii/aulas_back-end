@@ -12,7 +12,7 @@ var alunoDAO = require('./../model/DAO/alunoDAO.js');
 var message = require('./modulo/config.js');
 
 //Inserir um novo aluno
-const inserirAluno = function(dadosAluno) {
+const inserirAluno = function (dadosAluno) {
 
     //validação para tratar campos obrigatórios e quantidade de caracteres
     if (dadosAluno.nome == '' || dadosAluno.nome == undefined || dadosAluno.nome.length > 100 ||
@@ -36,17 +36,55 @@ const inserirAluno = function(dadosAluno) {
 }
 
 //Atualizar um aluno existente
-const atualizarAluno = function(dadosAluno) {
+const atualizarAluno = async function (dadosAluno, idAluno) {
+    //validação para tratar campos obrigatórios e quantidade de caracteres
+    if (dadosAluno.nome == '' || dadosAluno.nome == undefined || dadosAluno.nome.length > 100 ||
+        dadosAluno.rg == '' || dadosAluno.rg == undefined || dadosAluno.rg.lenght > 15 ||
+        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.lenght > 18 ||
+        dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.cpf.lenght > 10 ||
+        dadosAluno.email == '' || dadosAluno.email == undefined || dadosAluno.email.lenght > 200
+    ) {
+        return message.ERROR_REQUIRED_FIELDS; //status code 400
+
+        //validação de ID incorreto ou não informado
+    } else if (idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
+        return message.ERROR_INVALID_ID; //status code 400 
+    } else {
+        //Adiciona o ID do aluno no JSON dos dados
+        dadosAluno.id = idAluno
+
+        //Encaminha os dados para a model do aluno
+        let resultDadosAluno = await alunoDAO.updateAluno(dadosAluno);
+
+        if (resultDadosAluno) {
+            return message.SUCCESS_UPDATED_ITEM; //200
+        } else {
+            return message.ERROR_INTERNAL_SERVER; //500
+        }
+    }
 
 }
 
 //Deletar um aluno existente
-const deletarAluno = function(id) {
+const deletarAluno = async function (idAluno) {
 
+    //validação de ID incorreto ou não informado
+    if (idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
+        return message.ERROR_INVALID_ID; //status code 400 
+    } else {
+
+        //Encaminha os dados para a model do aluno
+        let resultDadosAluno = await alunoDAO.deleteAluno(idAluno)
+
+        if (resultDadosAluno) {
+            return message.SUCCESS_DELETED_ITEM; //200
+        } else {
+            return message.ERROR_INTERNAL_SERVER; //500
+        }
+    }
 }
-
 //Retorna a lista de todos os alunos
-const getAlunos = async function() {
+const getAlunos = async function () {
 
     let dadosAlunosJSON = {}
 
@@ -68,7 +106,7 @@ const getAlunos = async function() {
 }
 
 //Retorna alunos filtrando pelo nome
-const getBuscarAlunoNome = async function(nome) {
+const getBuscarAlunoNome = async function (nome) {
     let nomeAluno = nome
     console.log(nomeAluno);
 
@@ -94,7 +132,6 @@ const getBuscarAlunoNome = async function(nome) {
             return false;
         }
     } else {
-        console.log(1);
 
         return false;
     }
@@ -102,7 +139,7 @@ const getBuscarAlunoNome = async function(nome) {
 }
 
 //Retorna o aluno filtrando pelo id
-const getBuscarAlunoID = async function(id) {
+const getBuscarAlunoID = async function (id) {
 
     let idAluno = id
     console.log(idAluno);
@@ -126,7 +163,7 @@ const getBuscarAlunoID = async function(id) {
             console.log(dadosByIdAlunoJSON);
             return dadosByIdAlunoJSON;
         } else {
-            return false;
+            return message.ERROR_ID_NOT_FOUND;
         }
     } else {
         return false;
@@ -141,5 +178,7 @@ module.exports = {
     getAlunos,
     getBuscarAlunoNome,
     inserirAluno,
-    getBuscarAlunoID
+    getBuscarAlunoID,
+    atualizarAluno,
+    deletarAluno
 }

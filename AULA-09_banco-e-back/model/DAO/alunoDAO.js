@@ -12,7 +12,7 @@ let { PrismaClient } = require('@prisma/client');
 var prisma = new PrismaClient();
 
 //Inerir dados do aluno no Banco de Dados
-const insertAluno = async function(dadosAluno) {
+const insertAluno = async function (dadosAluno) {
 
     let sql = `insert into tbl_aluno (
             nome,
@@ -42,17 +42,50 @@ const insertAluno = async function(dadosAluno) {
 };
 
 //Atualizar dados do aluno no Banco de Dados
-const updateAluno = function() {
+const updateAluno = async function (dadosAluno) {
+    //scriptSQL para atualizar os dados no BD 
+    let sql = `update tbl_aluno set
+                    nome = '${dadosAluno.nome}',
+                    rg = '${dadosAluno.rg}',
+                    cpf = '${dadosAluno.cpf}',
+                    data_nascimento = '${dadosAluno.data_nascimento}',
+                    email = '${dadosAluno.email}'
+                where id = ${dadosAluno.id}`;
+
+    //Executa o script no DB
+    let resultStatus = await prisma.$executeRawUnsafe(sql);
+
+    if (resultStatus) {
+        return true;
+    } else {
+        return false;
+    }
+
 
 };
 
 //Deletar dados do aluno no Banco de Dados
-const deleteAluno = function() {
+const deleteAluno = async function (id) {
+    let idAluno = id;
+    console.log(idAluno);
 
+    //ScriptSQL para buscar todos os itens no BD
+    let sql = `delete from tbl_aluno where id = ${idAluno}`;
+
+
+    //Executa o script no DB
+    let resultStatus = await prisma.$executeRawUnsafe(sql);
+
+    //Valida se o banco de dados retornou algum registro 
+    if (resultStatus) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
 //Retornar todos os alunos no Banco de Dados
-const selectAllAlunos = async function() {
+const selectAllAlunos = async function () {
 
     //ScriptSQL para buscar todos os itens no BD
     let sql = 'select * from tbl_aluno';
@@ -73,12 +106,10 @@ const selectAllAlunos = async function() {
 };
 
 //Seleciona o aluno filtrando pelo nome
-const selectByNameAluno = async function(name) {
+const selectByNameAluno = async function (name) {
     let nomeAluno = name;
     console.log(nomeAluno);
 
-    //Instancia da classe PrismaClient
-    let prisma = new PrismaClient();
 
     //ScriptSQL para buscar todos os itens no BD
     let sql = `select * from tbl_aluno where nome like '%${nomeAluno}%'`;
@@ -98,7 +129,7 @@ const selectByNameAluno = async function(name) {
 }
 
 //Retornar o aluno filtrando pelo ID
-const selectByIdAlunos = async function(id) {
+const selectByIdAlunos = async function (id) {
     let idAluno = id;
     console.log(idAluno);
 
@@ -125,5 +156,7 @@ module.exports = {
     selectAllAlunos,
     selectByNameAluno,
     insertAluno,
-    selectByIdAlunos
+    selectByIdAlunos,
+    updateAluno,
+    deleteAluno
 }
