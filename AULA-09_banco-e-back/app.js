@@ -64,13 +64,8 @@ app.get('/v1/lion-school/aluno', cors(), async function(request, response) {
 
     let dadosAluno = await controllerAluno.getAlunos();
 
-    if (dadosAluno) {
-        response.json(dadosAluno);
-        response.status(200);
-    } else {
-        response.json();
-        response.status(404);
-    }
+    response.status(dadosAluno.status);
+    response.json(dadosAluno);
 
 });
 
@@ -79,18 +74,13 @@ app.get('/v1/lion-school/aluno/:id', cors(), async function(request, response) {
 
     //Recebe o nome do aluno que será enviada pela URL da requisição
     let idAluno = request.params.id
-    console.log(idAluno);
 
 
     let dadosAlunosById = await controllerAluno.getBuscarAlunoID(idAluno)
+    
 
-    if (dadosAlunosById) {
-        response.json(dadosAlunosById);
-        response.status(dadosAlunosById.status);
-    } else {
-        response.json(dadosAlunosById);
-        response.status(dadosAlunosById.status);
-    }
+    response.status(dadosAlunosById.status);
+    response.json(dadosAlunosById);
 
 });
 
@@ -148,6 +138,8 @@ app.put('/v1/lion-school/aluno/:id', cors(), bodyParserJSON, async function(requ
         let idAluno = request.params.id;
         //Receb os dados dos alunos encaminhado no corpo da requisição
         let dadosBody = request.body;
+
+        
     
         //Encaminha os dados para a controller
         let resultDadosAluno = await controller_aluno.atualizarAluno(dadosBody, idAluno);

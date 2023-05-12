@@ -131,10 +131,6 @@ const selectByNameAluno = async function (name) {
 //Retornar o aluno filtrando pelo ID
 const selectByIdAlunos = async function (id) {
     let idAluno = id;
-    console.log(idAluno);
-
-    //Instancia da classe PrismaClient
-    let prisma = new PrismaClient();
 
     //ScriptSQL para buscar todos os itens no BD
     let sql = `select * from tbl_aluno where id = ${idAluno}`;
@@ -152,11 +148,26 @@ const selectByIdAlunos = async function (id) {
     }
 };
 
+//Retorna o último ID inserido no DB
+const selectLastId = async function (id) {
+
+    let sql = 'select * from tbl_aluno order by id desc limit 1;'
+
+    let rsAluno = await prisma.$queryRawUnsafe(sql);
+
+    if (rsAluno.length > 0) {
+        return rsAluno;
+    } else {
+        return false;
+    }
+}
+
 module.exports = {
     selectAllAlunos,
     selectByNameAluno,
     insertAluno,
     selectByIdAlunos,
     updateAluno,
-    deleteAluno
+    deleteAluno,
+    selectLastId
 }

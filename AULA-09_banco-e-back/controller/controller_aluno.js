@@ -10,9 +10,10 @@ var alunoDAO = require('./../model/DAO/alunoDAO.js');
 
 //Import do arquivo de configuração das variaveis, constantes e funções globais
 var message = require('./modulo/config.js');
+const { ERROR_NOT_FOUND } = require('./modulo/config.js');
 
 //Inserir um novo aluno
-const inserirAluno = function (dadosAluno) {
+const inserirAluno = async function (dadosAluno) {
 
     //validação para tratar campos obrigatórios e quantidade de caracteres
     if (dadosAluno.nome == '' || dadosAluno.nome == undefined || dadosAluno.nome.length > 100 ||
@@ -24,11 +25,21 @@ const inserirAluno = function (dadosAluno) {
         return message.ERROR_REQUIRED_FIELDS;
     } else {
         //Envia os dados para a model inserir no BD
-        let resultDadosAluno = alunoDAO.insertAluno(dadosAluno);
+        let resultDadosAluno = await alunoDAO.insertAluno(dadosAluno);
+
+
 
         //Valida se o DB inseriu corretamente os dados
         if (resultDadosAluno) {
-            return message.SUCCESS_CREATED_ITEM; //status code 201
+
+            //Chama a função que vai encontrar o ID gerado após o insert
+            let novoAluno = await alunoDAO.selectLastId()
+            let dadosAlunoJSON = {};
+
+            dadosAlunoJSON.status = message.SUCCESS_CREATED_ITEM.status;
+            dadosAlunoJSON.aluno = novoAluno;
+
+            return dadosAlunoJSON; //status code 201
         } else {
             return message.ERROR_INTERNAL_SERVER; //status code 500
         }
@@ -51,16 +62,32 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
         return message.ERROR_INVALID_ID; //status code 400 
     } else {
         //Adiciona o ID do aluno no JSON dos dados
-        dadosAluno.id = idAluno
+        dadosAluno.id = idAluno;
+        let statusID = await alunoDAO.selectByIdAlunos(idAluno);
 
-        //Encaminha os dados para a model do aluno
-        let resultDadosAluno = await alunoDAO.updateAluno(dadosAluno);
 
-        if (resultDadosAluno) {
-            return message.SUCCESS_UPDATED_ITEM; //200
-        } else {
-            return message.ERROR_INTERNAL_SERVER; //500
+        if (statusID) {
+            //Encaminha os dados para a model do aluno
+            let resultDadosAluno = await alunoDAO.updateAluno(dadosAluno);
+
+
+
+            if (resultDadosAluno) {
+                let dadosAlunoJSON = {};
+
+                dadosAlunoJSON.status = message.SUCCESS_UPDATED_ITEM.status;
+                dadosAlunoJSON.aluno = dadosAluno;
+
+                return dadosAlunoJSON; //status code 201
+            } else {
+                return message.ERROR_INTERNAL_SERVER; //500
+
+            }
+
+        }else {
+            return message.ERROR_NOT_FOUND; //404
         }
+
     }
 
 }
@@ -97,10 +124,12 @@ const getAlunos = async function () {
 
     if (dadosAluno) {
         //Criando um JSON com o atrbuto alunos, para encaminhar um array de alunos
+        dadosAlunosJSON.status = message.SUCCESS_REQUEST.status;
+        dadosAlunosJSON.quantidade = dadosAluno.length;
         dadosAlunosJSON.alunos = dadosAluno;
         return dadosAlunosJSON;
     } else {
-        return false;
+        return message.ERROR_NOT_FOUND;
     }
 
 }
@@ -141,35 +170,33 @@ const getBuscarAlunoNome = async function (nome) {
 //Retorna o aluno filtrando pelo id
 const getBuscarAlunoID = async function (id) {
 
-    let idAluno = id
-    console.log(idAluno);
-
+    let idAluno = id;
 
     let dadosByIdAlunoJSON = {}
 
     //Import do arquivo DAO para acessar dados do aluno do BD
     let alunoDAO = require('../model/DAO/alunoDAO.js');
 
-    if (!isNaN(idAluno) && idAluno !== undefined && idAluno !== '') {
+    if (isNaN(idAluno) && idAluno == undefined && idAluno == '') {
 
+        return message.ERROR_ID_NOT_FOUND;
+
+    } else {
         //chama a função do arquivo DAO que irá retornar todos os registros do DB
         let dadosByIdAluno = await alunoDAO.selectByIdAlunos(idAluno);
 
 
         if (dadosByIdAluno) {
             //Criando um JSON com o atrbuto alunos, para encaminhar um array de alunos
+            dadosByIdAlunoJSON.status = message.SUCCESS_REQUEST.status
             dadosByIdAlunoJSON.alunos = dadosByIdAluno;
 
-            console.log(dadosByIdAlunoJSON);
             return dadosByIdAlunoJSON;
+
         } else {
-            return message.ERROR_ID_NOT_FOUND;
+            return message.ERROR_NOT_FOUND;
         }
-    } else {
-        return false;
     }
-
-
 
 }
 
