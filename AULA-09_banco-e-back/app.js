@@ -72,7 +72,7 @@ app.get('/v1/lion-school/aluno', cors(), async function(request, response) {
 //EndPoint: Retorna os aluno filtrando pelo ID
 app.get('/v1/lion-school/aluno/:id', cors(), async function(request, response) {
 
-    //Recebe o nome do aluno que será enviada pela URL da requisição
+    //Recebe o ID do aluno que será enviada pela URL da requisição
     let idAluno = request.params.id
 
 
